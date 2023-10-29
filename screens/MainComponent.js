@@ -9,6 +9,12 @@ import AboutScreen from './AboutScreen';
 import ContactScreen from './ContactScreen';
 import { Icon } from 'react-native-elements';
 import logo from '../assets/images/logo.png';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchPartners } from '../features/partners/partnersSlice';
+import { fetchComments } from '../features/comments/commentsSlice';
+import { fetchPromotions } from '../features/promotions/promotionsSlice';
+import { fetchCampsites } from '../features/campsites/campsiteSlice';
 
 const AppDrawer = createDrawerNavigator();
 
@@ -178,6 +184,16 @@ const customDrawerContent = (props) => {
 }
 
 const Main = () => {
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchCampsites())
+        dispatch(fetchPromotions())
+        dispatch(fetchPartners())
+        dispatch(fetchComments())
+    }, [dispatch])
+
+
     return (
         <View
             style={{

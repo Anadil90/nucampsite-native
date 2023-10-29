@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { baseUrl } from '../../app/shared/baseUrl';
-import { mapImageUrl } from '../../utils/mapImageUrl';
+import { baseUrl } from '../../shared/baseUrl';
 
 export const fetchPromotions = createAsyncThunk(
     'promotions/fetchPromotions',
@@ -31,7 +30,7 @@ const promotionsSlice = createSlice({
         [fetchPromotions.fulfilled]: (state, action) => {
             state.isLoading = false;
             state.errMsg = '';
-            state.promotionsArray = mapImageUrl(action.payload);
+            state.promotionsArray = action.payload;
         },
         [fetchPromotions.rejected]: (state, action) => {
             state.isLoading = false;

@@ -1,67 +1,14 @@
-{/*import { ScrollView, Text, View } from 'react-native';
-import { useState } from 'react';
-import { Card } from 'react-native-elements';
-import { CAMPSITES } from '../shared/campsites';
-import { PROMOTIONS } from '../shared/promotions';
-import { PARTNERS } from '../shared/partners';
 
-const FeaturedItem = ({item}) => {
-    if(item) {
-        <Card containerStyle={{padding: 0}}>
-            <Card.Image source={item.image}>
-                <View style={{justifyContent: 'center', flex: 1}}>
-                    <Text
-                        style={{
-                            color: '#fff',
-                            textAlign: 'center',
-                            fontSize: 20
-                        }}
-                    >
-
-                        {item.name}
-                    </Text>
-                </View>
-            </Card.Image>
-            <Text style={{margin: 20}}>{item.description}</Text>
-        </Card>
-    }
-    return <View />
-}
-
-
-const HomeScreen = () => {
-    const [campsites, setCampsites] = useState(CAMPSITES);
-    const [partners, setPartners] = useState(PARTNERS);
-    const [promotions, setPromotions] = useState(PROMOTIONS)
-
-    const featuredCampsite = campsites.find((item) => item.featured)
-    const featuredPartner = partners.find((item) => item.featured)
-    const featuredPromotion = promotions.find((item) => item.featured)
-
-    return (
-        <ScrollView>
-            <FeaturedItem item={featuredCampsite} />
-            <FeaturedItem item={featuredPartner} />
-            <FeaturedItem item={featuredPromotion} />
-        </ScrollView>
-    )
-}
-
-export default HomeScreen;
-*/}
-
-import { useState } from 'react';
+import { useSelector} from 'react-redux';
 import { ScrollView, Text, View } from 'react-native';
 import { Card } from 'react-native-elements';
-import { CAMPSITES } from '../shared/campsites';
-import { PROMOTIONS } from '../shared/promotions';
-import { PARTNERS } from '../shared/partners';
+import { baseUrl } from '../shared/baseUrl';
 
 const FeaturedItem = ({ item }) => {
     if (item) {
         return (
             <Card containerStyle={{ padding: 0 }}>
-                <Card.Image source={item.image}>
+                <Card.Image source={{ uri: baseUrl + item.image}}>
                     <View style={{ justifyContent: 'center', flex: 1 }}>
                         <Text
                             style={{
@@ -82,13 +29,13 @@ const FeaturedItem = ({ item }) => {
 };
 
 const HomeScreen = () => {
-    const [campsites, setCampsites] = useState(CAMPSITES);
-    const [promotions, setPromotions] = useState(PROMOTIONS);
-    const [partners, setPartners] = useState(PARTNERS);
+    const campsites = useSelector((state) => state.campsites);
+    const partners = useSelector((state) => state.partners);
+    const promotions = useSelector((state) => state.promotions)
 
-    const featCampsite = campsites.find((item) => item.featured);
-    const featPromotion = promotions.find((item) => item.featured);
-    const featPartner = partners.find((item) => item.featured);
+    const featCampsite = campsites.campsitesArray.find((item) => item.featured);
+    const featPromotion = promotions.promotionsArray.find((item) => item.featured);
+    const featPartner = partners.partnersArray.find((item) => item.featured);
 
     return (
         <ScrollView>

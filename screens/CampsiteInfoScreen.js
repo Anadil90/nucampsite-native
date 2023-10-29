@@ -2,6 +2,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import RenderCampsite from '../features/campsites/RenderCampsite';
 import { COMMENTS } from '../shared/comments';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
     commentsTitle: {
@@ -33,13 +34,13 @@ const renderCommentItem = ({ item }) => {
 }
 
 const CampsiteInfoScreen = ({ route }) => {
-    const [comments, setComments] = useState(COMMENTS);
+    const comments = useSelector((state) => state.comments)
     const { campsite } = route.params;
     const [favorite, setFavorite] =useState(false);
 
     return (
         <FlatList 
-            data={comments.filter(
+            data={comments.commentsArray.filter(
                 (comment) => comment.campsiteId === campsite.id
             )}
             renderItem={renderCommentItem}
