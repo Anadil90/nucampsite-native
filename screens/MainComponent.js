@@ -15,6 +15,7 @@ import { fetchPartners } from '../features/partners/partnersSlice';
 import { fetchComments } from '../features/comments/commentsSlice';
 import { fetchPromotions } from '../features/promotions/promotionsSlice';
 import { fetchCampsites } from '../features/campsites/campsiteSlice';
+import ReservationScreen from './ReservationScreen';
 
 const AppDrawer = createDrawerNavigator();
 
@@ -137,6 +138,29 @@ const ContactScreenNavigator = () => {
     )
 }
 
+const ReservationNavigator = () => {
+    const Stack = createStackNavigator();
+    return (
+        <Stack.Navigator screenOptions={screenOptions}>
+            <Stack.Screen
+                name='Reservation'
+                component={ReservationScreen}
+                options={({ navigation }) => ({
+                    title: 'Reservation Search',
+                    headerLeft: () => (
+                        <Icon
+                            name='tree'
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                        />
+                    )
+                })}
+            />
+        </Stack.Navigator>
+    );
+};
+
 const AboutScreenNavigator = () => {
     const Stack = createStackNavigator();
     return (
@@ -241,6 +265,23 @@ const Main = () => {
                         )
                     }}
                     
+                />
+
+                <AppDrawer.Screen
+                    name='ReserveCampsite'
+                    component={ReservationNavigator}
+                    options={{
+                        title: 'Reserve Campsite',
+                        drawerIcon: ({ color }) => (
+                            <Icon
+                                name='tree'
+                                type='font-awesome'
+                                size={24}
+                                iconStyle={{ width: 24 }}
+                                color={color}
+                            />
+                        )
+                    }}
                 />
 
                 <AppDrawer.Screen
