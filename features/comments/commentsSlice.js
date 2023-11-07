@@ -16,18 +16,23 @@ export const fetchComments = createAsyncThunk(
 
 export const postComment = createAsyncThunk(
     'comments/postComments',
-    async (comment, {dispatch}) => {
+    async (payload, {dispatch, getState}) => {
+        const { comments } = getState();
+        comments.date = new Date().toISOString();
         const response = await fetch(baseUrl + 'comments', {
             method: 'POST',
-            body: JSON.stringify(comment),
+            body: JSON.stringify(comments),
             headers: {'Content-Type': 'application/json'}
         }
         );
         if(!response.ok) {
             return Promise.reject(response.status);
         }
-        const data = await response.json()
-        dispatch(addComment(data));
+        
+            
+        dispatch(addComment(payload));
+    
+        
     }
 )
 
@@ -44,11 +49,7 @@ const commentsSlice = createSlice({
         addComment: (state, action) => { //Add Comment Action
             console.log('addComment action payload', action.payload)
             console.log('addComment state.commentsArray', state.commentsArray)
-            const newComment = {
-                id: state.commentsArray.length + 1,
-                ...action.payload
-            }
-            state.commentsArray.push(newComment);
+            state.commentsArray.push(action.payload);
         }
     },
     extraReducers: {
