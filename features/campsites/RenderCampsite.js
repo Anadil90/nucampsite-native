@@ -1,14 +1,22 @@
 import { StyleSheet, Text, View, PanResponder, Alert } from 'react-native';
+import { useRef } from 'react';
 import { Icon, Card } from 'react-native-elements';
 import { baseUrl } from '../../shared/baseUrl';
 import * as Animatable from 'react-native-animatable';
 
 const RenderCampsite = (props) => {
     const { campsite } = props;
-    const isLeftSwipe = ({ dx }) => dx < -200;
 
+    const view = useRef()
+    const isLeftSwipe = ({ dx }) => dx < -200;
+    const isRightSwipe = ({ dx }) => dx > 200;
     const panResponder = PanResponder.create({
+
         onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: () => {
+            view.current.rubberBand(1000)
+            .then((endState) => console.log(endState.finished ? 'Completed' : 'Canceled'))
+        },
         onPanResponderEnd: (event, gestureState) => {
             console.log('pan responder end ', gestureState)
             if(isLeftSwipe(gestureState)) {
@@ -34,6 +42,10 @@ const RenderCampsite = (props) => {
                     { cancelable: false}
                 )
             }
+            {/* On swipe right gesture*/}
+            if(isRightSwipe(gestureState)) {
+                props.onShowModal()
+            }
         } 
     })
 
@@ -43,6 +55,7 @@ const RenderCampsite = (props) => {
                 animation='fadeInDownBig'
                 duration={2000}
                 delay={1000}
+                ref={view}
                 {...panResponder.panHandlers}
             >
                <Card containerStyle={styles.cardContainer}>
