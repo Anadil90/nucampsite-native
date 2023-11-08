@@ -5,6 +5,7 @@ import RenderCampsite from '../features/campsites/RenderCampsite';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleFavorite } from '../features/favorites/favoritesSlice';
 import { postComment } from '../features/comments/commentsSlice';
+import * as Animatable from 'react-native-animatable';
 
 const styles = StyleSheet.create({
     commentsTitle: {
@@ -32,21 +33,22 @@ const styles = StyleSheet.create({
 
 const renderCommentItem = ({ item }) => {
     return (
-        <View styles={styles.commentItem}>
-            <Text style={{fontSize: 14}}>{item.text}</Text>
-            <Rating 
-            startingValue={item.rating}
-            imageSize={10}
-            style={{
-                alignItems: 'flex-start',
-                paddingVertical: '5%'
-            }}
-            readonly
-            />
-            <Text>
-                {`--${item.author} ${item.date}`}
-            </Text>
-        </View>
+            <View styles={styles.commentItem}>
+                <Text style={{fontSize: 14}}>{item.text}</Text>
+                <Rating 
+                startingValue={item.rating}
+                imageSize={10}
+                style={{
+                    alignItems: 'flex-start',
+                    paddingVertical: '5%'
+                }}
+                readonly
+                />
+                <Text>
+                    {`--${item.author} ${item.date}`}
+                </Text>
+            </View>
+        
     )
 }
 
@@ -80,7 +82,8 @@ const CampsiteInfoScreen = ({ route }) => {
 
     return (
         <>
-            <FlatList 
+            <Animatable.View animation='fadeInUp' duration={2000} delay={1000}>
+               <FlatList 
                 data={comments.commentsArray.filter(
                     (comment) => comment.campsiteId === campsite.id
                 )}
@@ -148,7 +151,9 @@ const CampsiteInfoScreen = ({ route }) => {
                     </View>
                     
                 </View>
-            </Modal>
+            </Modal> 
+            </Animatable.View>
+            
         </>
         
     )
