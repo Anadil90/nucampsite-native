@@ -1,10 +1,41 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, PanResponder, Alert } from 'react-native';
 import { Icon, Card } from 'react-native-elements';
 import { baseUrl } from '../../shared/baseUrl';
 import * as Animatable from 'react-native-animatable';
 
 const RenderCampsite = (props) => {
     const { campsite } = props;
+    const isLeftSwipe = ({ dx }) => dx < -200;
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderEnd: (event, gestureState) => {
+            console.log('pan responder end ', gestureState)
+            if(isLeftSwipe(gestureState)) {
+                Alert.alert(
+                    'Add Favorite',
+                    'Are you sure you want to add ' + campsite.name + ' to your favorites?',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                            onPress: () => console.log('Cancelled adding favorite')
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => 
+                            props.isFavorite
+                            ?
+                            console.log('Already a favorite campsite!')
+                            :
+                            props.markFavorite()
+                        }
+                    ],
+                    { cancelable: false}
+                )
+            }
+        } 
+    })
 
     if (campsite) {
         return (
@@ -12,6 +43,7 @@ const RenderCampsite = (props) => {
                 animation='fadeInDownBig'
                 duration={2000}
                 delay={1000}
+                {...panResponder.panHandlers}
             >
                <Card containerStyle={styles.cardContainer}>
                     <Card.Image source={{uri: baseUrl + campsite.image}}>
