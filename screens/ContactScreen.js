@@ -6,11 +6,38 @@ import * as MailComposer from 'expo-mail-composer';
 
 const ContactScreen = () => {
     const sendMail = () => {
-        MailComposer.composeAsync({
-            recipients: ['campsites@nucamp.co'],
-            subject: 'Some questions',
-            body: 'I am writing this email to inquire about something that has come to my attention...'
-        });
+        /*MailComposer.isAvailableAsync()
+        .then((isAvailable) => { //check if application for handling emails is present on device
+            if(isAvailable) {
+                MailComposer.composeAsync({
+                    recipients: ['campsites@nucamp.co'],
+                    subject: 'Some questions',
+                    body: 'I am writing this email to inquire about something that has come to my attention...'
+                });
+            }
+            else {
+                console.log('No app for handling emails is present on device')
+            }
+        })
+        .catch((err) => { 
+            console.log(err)
+        })
+        */
+
+        MailComposer.isAvailableAsync().then((isAvailable) => {
+            if(isAvailable) {
+              MailComposer.composeAsync({
+                recipients: ['campsites@nucamp.co'],
+                subject: 'Some questions',
+                body: 'I am writing this email...'
+              })
+            } else {
+              // handle the case where no mail app is available
+              console.log("No mail app available");
+            }
+          }).catch((error) => {
+            console.log("An error occurred: ", error);
+          });
     };
 
     return (
@@ -39,7 +66,10 @@ const ContactScreen = () => {
                                 iconStyle={{ marginRight: 10 }}
                             />
                         }
-                        onPress={() => sendMail()}
+                        onPress={() => {
+                                sendMail()
+                            }
+                        }
                     />
                 </Card>
             </Animatable.View>

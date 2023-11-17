@@ -1,15 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { baseUrl } from '../../shared/baseUrl';
+import { mapImageURL } from '../../utils/mapImageURL';
+import { db } from '../../firebase.config';
+import { collection, getDocs } from 'firebase/firestore';
 
 export const fetchPromotions = createAsyncThunk(
     'promotions/fetchPromotions',
     async () => {
-        const response = await fetch(baseUrl + 'promotions')//get request to promotions
-        if(!response.ok) {//handle promise rejection
-            return Promise.reject('Unable to fetch data from server, status: ' + response.status);
-        }
-        const data = await response.json()//parsed data from request
-        return data//return reponse as resolved promise
+        const querySnapshot = await getDocs(collection(db, 'promotions'));
+        const promotions = [];
+        querySnapshot.forEach((doc) => {
+            promotions.push(doc.data());
+        })
+        return promotions; 
     }
 )
 
@@ -30,7 +32,7 @@ const promotionsSlice = createSlice({
         [fetchPromotions.fulfilled]: (state, action) => {
             state.isLoading = false;
             state.errMsg = '';
-            state.promotionsArray = action.payload;
+            state.promotionsArray = mapImageURL(action.payload);
         },
         [fetchPromotions.rejected]: (state, action) => {
             state.isLoading = false;

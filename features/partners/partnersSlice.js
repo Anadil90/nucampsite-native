@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { baseUrl } from '../../shared/baseUrl';
+import { mapImageURL } from '../../utils/mapImageURL';
+import { db } from '../../firebase.config';
+import { collection, getDocs } from 'firebase/firestore';
 
 export const fetchPartners = createAsyncThunk(
     'partners/fetchPartners',
     async () => {
-        const response = await fetch(baseUrl + 'partners')//get request to json server to look for partners array
-        if(!response.ok) {//handled promise rejection to deal with error
-            return Promise.reject('Server was unable to fetch data' + response.status);
-        }
-        const data = await response.json()//parse incoming data from server
-        return data;//return response as resolved promise
+        const querySnapshot = await getDocs(collection(db, 'partners'));
+        const partners = [];
+        querySnapshot.forEach((doc) => { //push each db document object to partners array
+            partners.push(doc.data());
+        })
+        return partners;
     }
 )
 
@@ -31,7 +33,7 @@ const partnersSlice = createSlice({
         [fetchPartners.fulfilled]: (state, action) => {
             state.isLoading = false;
             state.errMsg = '';
-            state.partnersArray = action.payload
+            state.partnersArray = mapImageURL(action.payload);
         },
         [fetchPartners.rejected]: (state, action) => {
             state.isLoading = false;

@@ -72,7 +72,7 @@ const AboutScreen = () => {
                         <ListItem key={partner.id}>
                             <Avatar
                                 rounded
-                                source={{ uri: baseUrl + partner.image }}
+                                source={ partner.image }
                             />
                             <ListItem.Content>
                                 <ListItem.Title>{partner.name}</ListItem.Title>

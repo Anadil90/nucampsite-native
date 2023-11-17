@@ -30,7 +30,7 @@ const DirectoryScreen = ({ navigation }) => {
                     onPress={() =>
                         navigation.navigate('CampsiteInfo', { campsite })
                     }
-                    imageSrc={{uri: baseUrl + campsite.image}}
+                    imageSrc={campsite.image}
                 />
             </Animatable.View>     
         );

@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { baseUrl } from '../../shared/baseUrl';
-
+import { db } from '../../firebase.config';
+import { collection, getDocs } from 'firebase/firestore';
 
 export const fetchComments = createAsyncThunk(
     'comments/fetchComments',
     async () => {
-        const response = await fetch(baseUrl + 'comments');//get request to fetch comments from json server
-        if(!response.ok) {//handle promise rejection
-            return Promise.reject('Unable to load comments, status: ' + response.status);
-        }
-        const data = await response.json()//parse resolved promise
-        return data//return resolved promise 
+        const querySnapshot = await getDocs(collection(db, 'comments')); //fetch comments from firestore db
+        const comments = [];
+        querySnapshot.forEach((doc) => {
+            comments.push(doc.data());
+        });
+        return comments;
     }
 )
 

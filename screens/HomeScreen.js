@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { Text, View, Animated } from 'react-native';
 import { Card } from 'react-native-elements';
 import { useSelector } from 'react-redux';
-import { baseUrl } from '../shared/baseUrl';
 import Loading from '../components/LoadingComponent';
 
 const FeaturedItem = (props) => {
@@ -11,17 +10,17 @@ const FeaturedItem = (props) => {
     if (props.isLoading) {
         return <Loading />;
     }
-    if (props.errMess) {
+    if (props.errMsg) {
         return (
             <View>
-                <Text>{props.errMess}</Text>
+                <Text>{props.errMsg}</Text>
             </View>
         );
     }
     if (item) {
         return (
             <Card containerStyle={{ padding: 0 }}>
-                <Card.Image source={{ uri: baseUrl + item.image }}>
+                <Card.Image source={item.image}>
                     <View style={{ justifyContent: 'center', flex: 1 }}>
                         <Text
                             style={{
@@ -67,17 +66,17 @@ const HomeScreen = () => {
             <FeaturedItem
                 item={featCampsite}
                 isLoading={campsites.isLoading}
-                errMess={campsites.errMess}
+                errMsg={campsites.errMsg}
             />
             <FeaturedItem
                 item={featPromotion}
                 isLoading={promotions.isLoading}
-                errMess={promotions.errMess}
+                errMsg={promotions.errMsg}
             />
             <FeaturedItem
                 item={featPartner}
                 isLoading={partners.isLoading}
-                errMess={partners.errMess}
+                errMsg={partners.errMsg}
             />
         </Animated.ScrollView>
     );

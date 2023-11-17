@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, PanResponder, Alert, Share} from 'react-native';
 import { useRef } from 'react';
 import { Icon, Card } from 'react-native-elements';
-import { baseUrl } from '../../shared/baseUrl';
 import * as Animatable from 'react-native-animatable';
 
 const RenderCampsite = (props) => {
@@ -72,7 +71,7 @@ const RenderCampsite = (props) => {
                 {...panResponder.panHandlers}
             >
                <Card containerStyle={styles.cardContainer}>
-                    <Card.Image source={{uri: baseUrl + campsite.image}}>
+                    <Card.Image source={campsite.image}>
                         <View style={{ justifyContent: 'center', flex: 1 }}>
                             <Text
                                 style={styles.cardText}
@@ -117,7 +116,7 @@ const RenderCampsite = (props) => {
                     onPress={() => shareCampsite(
                         campsite.name,
                         campsite.description,
-                        baseUrl + campsite.image
+                        campsite.image
                     )}
                     /> 
                     </View>

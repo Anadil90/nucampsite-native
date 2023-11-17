@@ -1,17 +1,18 @@
 //import { CAMPSITES } from '../../app/shared/oldData/CAMPSITES';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { baseUrl } from '../../shared/baseUrl';
-import { mapImageUrl } from '../../utils/mapImageUrl';
+import { mapImageURL } from '../../utils/mapImageURL';
+import { db } from '../../firebase.config';
+import { collection, getDocs } from 'firebase/firestore';
 
 export const fetchCampsites = createAsyncThunk(
     'campsites/fetchCampsites', //action type
     async () => {
-        const response = await fetch(baseUrl + 'campsites') //get request to json server to look for campsites
-        if(!response.ok) {//handled promise rejection to deal with data fetching error
-            return Promise.reject('Server was unable to fetch data, status: ' + response.status);
-        }
-        const data = await response.json();//parse incoming data to object when promise is resolved
-        return data;
+        const querySnapshot = await getDocs(collection(db, 'campsites'));
+        const campsites = [];
+        querySnapshot.forEach((doc) => { //loop through firestore document in collection and push to array
+            campsites.push(doc.data())
+        })
+        return campsites;
     }
 )
 
@@ -32,7 +33,7 @@ const campsitesSlice = createSlice({
     [fetchCampsites.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.errMsg = '';
-      state.campsitesArray = action.payload;
+      state.campsitesArray = mapImageURL(action.payload);
     },
     [fetchCampsites.rejected]: ( state, action ) => {
       state.isLoading = false;

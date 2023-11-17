@@ -57,7 +57,7 @@ const FavoritesScreen = ({ navigation }) => {
                     >
                         <Avatar
                             rounded
-                            source={{ uri: baseUrl + campsite.image }}
+                            source={campsite.image }
                         />
                         <ListItem.Content>
                             <ListItem.Title>{campsite.name}</ListItem.Title>
@@ -77,7 +77,7 @@ const FavoritesScreen = ({ navigation }) => {
     if (errMess) {
         return (
             <View>
-                <Text>{errMess}</Text>
+                <Text>{errMsg}</Text>
             </View>
         );
     }
